@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FunFrame</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      margin: 0;
+      background: #fff0f6;
+      color: #333;
+    }
+    .container { display: flex; flex-direction: column; min-height: 100vh; }
+    header { background: #ff7ab6; color: white; padding: 1rem; text-align: center; }
+    header h1 { margin: 0; }
+    .controls { margin-top: .5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .grid { display: flex; flex: 1; padding: 1rem; gap: 1rem; flex-wrap: wrap; }
+    main { flex: 2; min-width: 300px; }
+    aside { flex: 1; min-width: 250px; }
+    .card { background: white; border-radius: 1rem; padding: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,.1); }
+    .preview-wrap { position: relative; width: 100%; padding-top: 56%; background: #eee; border-radius: .5rem; overflow: hidden; }
+    #cam { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+    .stickers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px,1fr)); gap: .5rem; }
+    .stick-btn { border: none; background: transparent; cursor: pointer; text-align: center; }
+    .stick-btn img { width: 60px; height: 60px; }
+    .btn { background: #ff7ab6; border: none; color: white; padding: .5rem 1rem; border-radius: .5rem; cursor: pointer; }
+    .btn.secondary { background: #999; }
+    .toolbar { margin-top: 1rem; display:flex; gap:.5rem; align-items:center; flex-wrap: wrap; }
+    #outCanvas { display:none; margin-top:1rem; max-width:100%; border:2px dashed #ccc; }
+    footer { text-align: center; padding: .5rem; background:#ffd6e7; }
+    .sticker { position:absolute; max-width:150px; cursor:move; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📸 FunFrame</h1>
+      <div class="controls">
+        <label>Tema warna <input id="color" type="color" value="#ff7ab6"></label>
+        <button id="capture" class="btn">Ambil Foto</button>
+        <button id="download" class="btn secondary">Download</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <main>
+        <div class="card">
+          <div id="previewArea" class="preview-wrap">
+            <video id="cam" autoplay playsinline muted></video>
+          </div>
+
+          <div class="toolbar">
+            <button id="reset" class="btn secondary">Reset</button>
+            <button id="qrBtn" class="btn secondary">Buat QR</button>
+            <div id="qrHolder"></div>
+          </div>
+
+          <canvas id="outCanvas" width="800" height="450"></canvas>
+        </div>
+      </main>
+
+      <aside>
+        <div class="card">
+          <h2>Stiker</h2>
+          <div id="stickers" class="stickers-grid">
+            <button class="stick-btn" data-src="https://i.imgur.com/4AiXzf8.png"><img src="https://i.imgur.com/4AiXzf8.png" alt="kacamata"><div>Kacamata</div></button>
+            <button class="stick-btn" data-src="https://i.imgur.com/2yaf2wb.png"><img src="https://i.imgur.com/2yaf2wb.png" alt="topi"><div>Topi</div></button>
+            <button class="stick-btn" data-src="https://i.imgur.com/DKc7k6q.png"><img src="https://i.imgur.com/DKc7k6q.png" alt="hati"><div>Hati</div></button>
+          </div>
+
+          <div class="section">
+            <label>Upload stiker <input id="uploadSticker" type="file" accept="image/*"></label>
+          </div>
+
+          <div class="section">
+            <h3>Stiker terpasang</h3>
+            <ul id="placedList"></ul>
+          </div>
+
+          <div class="section">
+            <h3>Petunjuk</h3>
+            <ol>
+              <li>Pilih tema warna.</li>
+              <li>Tambah & seret stiker di preview.</li>
+              <li>Klik Ambil Foto → Download/QR.</li>
+            </ol>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>💡 FunFrame berjalan lebih baik di HTTPS (GitHub Pages otomatis pakai HTTPS).</footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    const video = document.getElementById('cam');
+    const colorInput = document.getElementById('color');
+    const pr
